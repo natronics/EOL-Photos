@@ -8,8 +8,8 @@ $def with (page, title=None)
   <meta name="author" content="natronics" />
   
   <!-- Link in Bootstrap CSS -->
-  <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet" />
-  <link href="static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
+  <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" />
+  <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
   <style>
    body { padding-top: 60px; }
   </style>
@@ -22,7 +22,14 @@ $if title: $title</title>
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <a class="brand" href="/">ISS tumblr chooser</a>
+        <a class="brand" href="/">EOL Browser</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="active">
+              <a href="/">Overview</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

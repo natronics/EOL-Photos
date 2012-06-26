@@ -1,0 +1,16 @@
+$def with (dates)
+<div class="row">
+  <div class="span4">
+    <h3>Choose a gallery</h3>
+    <p>
+      Grouped by the date JSC posted them.
+    </p>
+    <div class="well" style="padding-top: 8px; padding-right: 0px; padding-bottom: 8px; padding-left: 0px;">
+      <ul class="nav nav-list">
+        <li class="nav-header">Photo Collections</li>
+$for date in dates:
+    $:render.photo_date_item(date[0], date[1])
+      </ul>
+    </div>
+  </div>
+</div>
