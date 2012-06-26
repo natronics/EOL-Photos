@@ -1,0 +1,40 @@
+$def with (page, title=None)
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Latest images from the ISS" />
+  <meta name="author" content="natronics" />
+  
+  <!-- Link in Bootstrap CSS -->
+  <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet" />
+  <link href="static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
+  <style>
+   body { padding-top: 60px; }
+  </style>
+  
+  <!--Title-->
+  <title>\
+$if title: $title</title>
+ </head>
+ <body>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="/">ISS tumblr chooser</a>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+
+   $:page
+   
+   <div class="footer">
+     <hr />
+     <a href="#">Back to top</a>
+     <p><br /><br /> </p>
+   </div>
+  </div>
+ </body>
+</html>

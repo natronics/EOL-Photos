@@ -1,0 +1,27 @@
+$def with (images)
+<div class="row">
+ <div class="span8">
+   <h2>New Photos</h2>
+   <hr />
+   <ul class="thumbnails">
+$for image in images:
+    $:render.image()
+  </ul>
+  <hr />
+  <a href="#" class="btn btn-primary">Load More</a>
+ </div>
+ <div class="span4">
+  <div class="well">
+    in the well
+    <ul class="thumbnails">
+     <li class="span3">
+       <a href="#" class="thumbnail">
+      <img src="http://eol.jsc.nasa.gov/sseop/images/thumb/ISS031/ISS031-E-30291.jpg" width="260" height="180" />
+      </a>
+     </li>
+    </ul>
+  </div>
+ </div>
+</div>
+
+
