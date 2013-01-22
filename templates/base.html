@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    
+    <title>{{ sitename }} &mdash; {{ title|safe }}</title>
+  </head>
+  <body>
+    <div id="wrapper">
+
+      <div id="header">
+        <div class="container">
+          <h1>{{ sitename }} &mdash; {{ title|safe }}</h1>
+          <hr />
+        </div>
+      </div>
+      
+      <div id="content">
+        <div class="container">
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+      
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <hr />
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>made by <a href="http://twitter.com/natronics">@natronics</a> in the fabulous hipster paradise of Portland, Ore.</p>
+        <ul class="footer-links">
+          <li>view the <a href="https://github.com/natronics/EOL-Photos">source code of this site on github</a></li>
+          <li>images from <a href="http://eol.jsc.nasa.gov/">Image Science and Analysis Laboratory, NASA-Johnson Space Center</a></li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
