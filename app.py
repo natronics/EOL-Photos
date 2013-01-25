@@ -17,7 +17,7 @@ def favicon():
 def loader():
     print request.form["id"]
 
-    images = range(10)
+    images = range(6*10)
     return render_template('loader.html', images=images)
 
 if __name__ == "__main__":

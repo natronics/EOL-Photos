@@ -4,4 +4,20 @@
     $.post('loader.html', {"id": "fhqwhgads"}, function(data) {
       $('#result').html(data);
     });
+
+    function get_more() {
+        console.log("dufus");
+
+        $.post('loader.html', {"id": "fhqwhgads"}, function(data) {
+            $('#result').after(data);
+        });
+
+    }
+
+    $(window).scroll(function(){
+        if  ($(window).scrollTop() == $(document).height() - $(window).height()){
+           get_more();
+        }
+    });
 </script>
+
