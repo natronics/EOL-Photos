@@ -8,6 +8,13 @@ a, a:hover {
     color: #c02942;
 }
 
+/*
+body {
+    background: #222;
+    color: #fff;
+}
+*/
+
 #header {
     background: #542437;
     color: #fff;
@@ -25,6 +32,10 @@ a, a:hover {
 
 #content {
     padding-top: 30px;
+}
+
+#content img {
+    margin-bottom: 20px;
 }
 
 #footer {
