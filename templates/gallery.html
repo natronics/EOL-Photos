@@ -1,17 +1,26 @@
-<div id="result">
+<div class="row">
+  <div id="result">
+  </div>
+</div>
+<div class="row">
+    <div id="loadermessage" class="span12 center" style="display:none;">
+        Loading More Images ...
+    </div>
 </div>
 <script>
+    $('#loadermessage').show();
+
     $.post('loader.html', {"id": "fhqwhgads"}, function(data) {
-      $('#result').html(data);
+        $('#result').html(data);
+        $('#loadermessage').hide();
     });
 
     function get_more() {
-        console.log("dufus");
-
+        $('#loadermessage').show();
         $.post('loader.html', {"id": "fhqwhgads"}, function(data) {
             $('#result').after(data);
+            $('#loadermessage').hide();
         });
-
     }
 
     $(window).scroll(function(){

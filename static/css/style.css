@@ -15,6 +15,10 @@ body {
 }
 */
 
+.center {
+    text-align: center;
+}
+
 #header {
     background: #542437;
     color: #fff;

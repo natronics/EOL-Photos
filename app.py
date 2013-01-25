@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, jsonify, render_template, send_from_directory
+import time
 app = Flask(__name__)
 
 GLOBALS = {"sitename": "EOL Browser"}
@@ -18,6 +19,9 @@ def loader():
     print request.form["id"]
 
     images = range(6*10)
+
+    # Simulate netowork delay
+    time.sleep(0.85)
     return render_template('loader.html', images=images)
 
 if __name__ == "__main__":
