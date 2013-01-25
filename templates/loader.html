@@ -1,6 +1,6 @@
 {% for img in images %}
-  <div class="span2">
-    <img src="{{ url_for('static', filename='img/ISS031-E-146394.jpg') }}" class="img-rounded" />
+  <div id="{{ img.id }}" class="span2">
+    <img src="{{ img.url }}" class="img-rounded" />
   </div>
 {% else %}
     <em>Unbelievable.  No entries here so far</em>

@@ -16,9 +16,18 @@ def favicon():
 
 @app.route("/loader.html", methods=['POST'])
 def loader():
-    print request.form["id"]
+    try:
+        after = int(request.form["after"])
+    except:
+        after = 0
 
-    images = range(6*10)
+    print "after:", after
+
+    images = []
+    for image in xrange(6*10):
+        url = "/static/img/ISS031-E-146394.jpg"
+        iid = image
+        images.append({"id": iid, "url": url})
 
     # Simulate netowork delay
     time.sleep(0.85)

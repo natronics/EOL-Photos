@@ -8,24 +8,32 @@
     </div>
 </div>
 <script>
+    var loading = true;
     $('#loadermessage').show();
 
-    $.post('loader.html', {"id": "fhqwhgads"}, function(data) {
+    $.post('loader.html', {"after": 0}, function(data) {
         $('#result').html(data);
         $('#loadermessage').hide();
+        loading = false;
     });
 
     function get_more() {
         $('#loadermessage').show();
-        $.post('loader.html', {"id": "fhqwhgads"}, function(data) {
+        var lastimg = $('#result div').last().attr("id");
+        //console.log(lastimg);
+        $.post('loader.html', {"after": lastimg}, function(data) {
             $('#result').after(data);
             $('#loadermessage').hide();
+            loading = false;
         });
     }
 
     $(window).scroll(function(){
         if  ($(window).scrollTop() == $(document).height() - $(window).height()){
-           get_more();
+            if (!loading) {
+                loading = true;
+                get_more();
+            }
         }
     });
 </script>
