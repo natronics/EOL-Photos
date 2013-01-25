@@ -20,9 +20,9 @@
     function get_more() {
         $('#loadermessage').show();
         var lastimg = $('#result div').last().attr("id");
-        //console.log(lastimg);
+        console.log(lastimg);
         $.post('loader.html', {"after": lastimg}, function(data) {
-            $('#result').after(data);
+            $('#result').append(data);
             $('#loadermessage').hide();
             loading = false;
         });

@@ -26,7 +26,7 @@ def loader():
     images = []
     for image in xrange(6*10):
         url = "/static/img/ISS031-E-146394.jpg"
-        iid = image
+        iid = after + image
         images.append({"id": iid, "url": url})
 
     # Simulate netowork delay
