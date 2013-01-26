@@ -21,8 +21,12 @@
   <p class="bump">
   </p>
   <p>
-    I built this site to make it easier to browse through the thousands of photos coming in from
-    space every week.
+    Recent EOL Updates:
+    <ul>
+      {% for set in photosets %}
+        <li>{{ set|safe }}</li>
+      {% endfor %}
+    </ul>
   </p>
   <p class="bump">
   </p>

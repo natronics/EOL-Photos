@@ -20,7 +20,7 @@
 
     start_loading();
 
-    $.post('loader.html', {"after": 0}, function(data) {
+    $.post('loader.html', function(data) {
         $('#result').html(data);
         stop_loading();
         text = "Loading More Images "

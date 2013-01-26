@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, jsonify, render_template, send_from_directory
+import eol
 import time
 app = Flask(__name__)
 
@@ -18,17 +19,21 @@ def favicon():
 
 @app.route("/loader.html", methods=['POST'])
 def loader():
+    chunk = 60
     try:
-        after = int(request.form["after"])
+        after = int(request.form["after"]) +1
     except:
         after = 0
 
-    print "after:", after
+    data = eol.show_photos(chunk, after)
+
+    print chunk, after
 
     images = []
-    for image in xrange(6*10):
-        url = "/static/img/ISS031-E-146394.jpg"
-        iid = after + image
+
+    for i, d in enumerate(data):
+        url = d['thumb']
+        iid = after + i
         images.append({"id": iid, "url": url})
 
     # Simulate netowork delay
@@ -37,9 +42,11 @@ def loader():
 
 @app.route("/about.html")
 def about():
+    sets = eol.get_photosets()
     return render_template('about.html', sitename=GLOBALS["sitename"]
                                        , title="About This Site"
-                                       , links=[{"title": "Image Gallery", "url": "/"}])
+                                       , links=[{"title": "Image Gallery", "url": "/"}]
+                                       , photosets=sets)
 
 if __name__ == "__main__":
     app.debug = True
