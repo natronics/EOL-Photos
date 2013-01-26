@@ -7,7 +7,9 @@ GLOBALS = {"sitename": "EOL Browser"}
 
 @app.route("/")
 def index():
-    return render_template('index.html', sitename=GLOBALS["sitename"], title="Database of ISS Photographs")
+    return render_template('index.html', sitename=GLOBALS["sitename"]
+                                       , title="Database of ISS Photographs"
+                                       , links=[{"title": "About", "url": "/about.html"}])
 
 @app.route('/favicon.ico')
 def favicon():
@@ -32,6 +34,12 @@ def loader():
     # Simulate netowork delay
     time.sleep(1.85)
     return render_template('loader.html', images=images)
+
+@app.route("/about.html")
+def about():
+    return render_template('about.html', sitename=GLOBALS["sitename"]
+                                       , title="About This Site"
+                                       , links=[{"title": "Image Gallery", "url": "/"}])
 
 if __name__ == "__main__":
     app.debug = True

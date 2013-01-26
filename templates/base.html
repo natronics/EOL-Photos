@@ -15,6 +15,11 @@
       <div id="header">
         <div class="container">
           <h1>{{ sitename }} &mdash; {{ title|safe }}</h1>
+          <ul class="header-links pull-right">
+            {% for link in links %}
+              <li><a href="{{ link.url}}">{{ link.title }}</a></li>
+            {% endfor %}
+          </ul>
           <hr />
         </div>
       </div>

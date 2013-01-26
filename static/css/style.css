@@ -38,19 +38,18 @@ body {
     padding-bottom: 10px;
 }
 
-#gallery {
+#section {
     background: #000;
     color: #ccc;
     padding: 50px 40px 40px 40px;
     margin-left: -40px;
     width: 960px;
 }
-/*
-#content .row, #content .page-header {
-    background: #000;
-    color: #fff;
+
+.bump {
+    padding: 10px 0;
 }
-*/
+
 #content h2 {
     font-size: 2.0em;
     font-weight: normal;
@@ -79,6 +78,19 @@ body {
     border-bottom: 1px solid #333;
 }
 
+.header-links {
+	list-style: none;
+	margin:0;
+    margin-top: -20px;
+	padding:0;
+	margin-left: -10px;
+}
+
+.header-links li {
+	display: block;
+	float: left;
+	padding: 0 10px;
+}
 .footer-links {
 	list-style: none;
 	margin:0;

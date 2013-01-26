@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div id="section">
+  <h2>Earth Observatory Library, Recent Image Browser</h2>
+
+  <p>
+    <a href=""><acronym title="National Aeronautics and Space Administration">NASA</acronym>&rsquo;s
+    <acronym title="Earth Observatory Library">EOL</acronym> site</a> is a treasure trove of images
+    from space taken by astronauts during their missions.  Their database, the &ldquo;Gateway to
+    Astronaut Photography of Earth&rdquo; records the location and a description of over 600,000 astronaut 
+    photographs. The database can be queried by location, camera type, date, mission, etc.  Updates
+    are pushed into the database a few times a week as images are downloaded from the International
+    Space Station.
+  </p>
+  <p>
+    I enjoy looking through the recent images, but I don't enjoy
+    <acronym title="Earth Observatory Library">EOL</acronym>&rsquo;s outdated interface and only
+    being able to see 50 imgaes per page in a single column!
+  </p>
+  <p class="bump">
+  </p>
+  <p>
+    I built this site to make it easier to browse through the thousands of photos coming in from
+    space every week.
+  </p>
+  <p class="bump">
+  </p>
+
+  <h2>How to use the site</h2>
+  <p>
+    As new images are posted to the database, they will show up on the front page here. The most
+    recent 1000 will load as you scroll.
+  </p>
+  <p>
+    I don&rsquo;t own or controll any of the images.  This is not real time data as it usually
+    takes a couple of weeks for the images to get posted by NASA.  You'll also notice that
+    the images can be very repeditive as the astronauts often set up time lapse photography
+    on the station. There might be 100 photos in a row with from the same angle!
+  </p>
+</div>
+
+
+{% endblock content %}
