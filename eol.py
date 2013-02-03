@@ -75,7 +75,7 @@ def get_page(key, page):
     images = []
 
     # POST data
-    params = urllib.urlencode({   'HTMLfooter': key['htmlfooter']
+    params = urllib.urlencode({ 'HTMLfooter': key['htmlfooter']
                               , 'infile':     key['infile']
                               , 'page':       page
                               , 'pagesize':   50
@@ -108,7 +108,7 @@ def scrape_photos(url):
     for im in images_1:
         images.append(im)
     for i in range(2, record_key['pages']+1):
-        print "getting page", i
+        print "getting page", i, "of", record_key['pages']
         images_page = get_page(record_key, i)
         for im in images_page:
             images.append(im)
