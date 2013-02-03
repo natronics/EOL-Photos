@@ -27,7 +27,15 @@ def loader():
     except:
         after = 0
 
-    data = eol.show_photos(request.form["set"], chunk, after)
+    setid = request.form["set"]
+
+    if after == 0:
+        header = eol.get_metadata(setid)
+    else:
+        header = None
+    
+
+    data = eol.show_photos(setid, chunk, after)
 
     print after
 
@@ -36,11 +44,13 @@ def loader():
     for i, d in enumerate(data):
         url = d['thumb']
         iid = after + i
-        images.append({"id": iid, "url": url})
+        images.append({"id": iid, "url": url, "m": d['m'], "r": d['r'], "f":d['f']})
 
     # Simulate netowork delay
     #time.sleep(0.85)
-    return render_template('loader.html', images=images)
+    return render_template('loader.html', header=header
+                                        , setid=setid
+                                        , images=images)
 
 @app.route("/about.html")
 def about():

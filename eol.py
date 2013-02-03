@@ -39,7 +39,10 @@ def show_photos(key, num, after):
     for p in photos:
         p = json.loads(p)
         data.append({
-                      'thumb': THUMB_BASE.format(mission=p['mission'], roll=p['roll'], frame=p['frame'])
+                      'thumb': THUMB_BASE.format(mission=p['mission'], roll=p['roll'], frame=p['frame']),
+                      'm': p['mission'],
+                      'r': p['roll'],
+                      'f': p['frame'],
                     })
     return data
 
@@ -51,6 +54,10 @@ def get_most_recent():
     sets.sort()
     return "eol-"+str(sets[-1])
 
+def get_metadata(setid):
+    upload_date = datetime.datetime.strptime(setid[4:], "%Y%m%d")
+    upload_date = upload_date.strftime("%B %d, %Y")
+    return upload_date
 
 ############
 

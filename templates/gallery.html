@@ -7,6 +7,12 @@
         Loading More Images ...
     </div>
 </div>
+<div id="modalimage" class="modal eolimage">
+    <h1>title</h1>
+    <a href="#" class="dlink" target="_blank"><img src="" /></a>
+    <p></p>
+    <a href="javascript:closeImage();">close</a>
+</div>
 <script>
     var loading = true;
     var i = 0;
@@ -42,12 +48,36 @@
     function get_more() {
         start_loading();
         var lastimg = $('#result div').last().attr("id");
-        console.log(lastimg);
-        $.post('loader.html', {"after": lastimg}, function(data) {
+        var set = $('#result h3').last().attr("id");
+        console.log(set);
+        $.post('loader.html', {"after": lastimg, "set": set}, function(data) {
             $('#result').append(data);
             stop_loading();
         });
     }
+
+    function closeImage() {
+        $("#content").unbind('click');
+        $('#modalimage').hide();
+    }
+
+    function expandImage(mission, roll, frame) {
+        var imgsrc = "http://eol.jsc.nasa.gov/sseop/images/ESC/small/"+mission+"/"+mission+"-"+roll+"-"+frame+".jpg";
+        var link = "http://eol.jsc.nasa.gov/scripts/sseop/photo.pl?mission="+mission+"&roll="+roll+"&frame="+frame;
+        var dl = "http://eol.jsc.nasa.gov/sseop/images/ESC/large/"+mission+"/"+mission+"-"+roll+"-"+frame+".jpg";
+
+        $('#modalimage h1').html(mission+"&ndash;"+roll+"&ndash;"+frame);
+        $('#modalimage .dlink').attr("href", dl);
+        $('#modalimage img').attr("src", imgsrc);
+        $('#modalimage p').html('<a href="'+link+'" target="_blank">EOL page for this image</a><br /><a href="'+dl+'">Download large image</a>');
+        
+        $("#content").click(function() {
+            closeImage();
+        });
+
+        $('#modalimage').show();
+    }
+
 
     $(window).scroll(function(){
         if  ($(window).scrollTop() == $(document).height() - $(window).height()){

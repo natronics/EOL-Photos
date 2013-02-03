@@ -1,6 +1,11 @@
+{% if header %}
+  <div class="span12">
+    <h3 id="{{setid}}" >{{ header|safe }}</h3>
+  </div>
+{% endif %}
 {% for img in images %}
   <div id="{{ img.id }}" class="span2">
-    <img src="{{ img.url }}" class="img-rounded" />
+    <a href="javascript:expandImage('{{img.m}}', '{{img.r}}', '{{img.f}}');"><img src="{{ img.url }}" class="img-rounded" /></a>
   </div>
 {% else %}
   <div class="span12">
