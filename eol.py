@@ -52,11 +52,15 @@ def get_most_recent():
     for d in data:
         sets.append(int(d))
     sets.sort()
-    return "eol-"+str(sets[-1])
+    if len(sets) > 0:
+        return "eol-"+str(sets[-1])
+    return ""
 
 def get_metadata(setid):
-    upload_date = datetime.datetime.strptime(setid[4:], "%Y%m%d")
-    upload_date = upload_date.strftime("%B %d, %Y")
+    upload_date = "No new photos"
+    if len(setid) > 4:
+        upload_date = datetime.datetime.strptime(setid[4:], "%Y%m%d")
+        upload_date = upload_date.strftime("%B %d, %Y")
     return upload_date
 
 ############
