@@ -11,21 +11,30 @@ import time
 REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 r = redis.StrictRedis.from_url(REDIS_URL)
 
+# EOL constants
+SETURL_BASE = "http://eol.jsc.nasa.gov/scripts/sseop/PhotoIdSets/PhotoIdSets.pl?set=DailyUpdates%2F{guid}-Images"
 THUMB_BASE = "http://eol.jsc.nasa.gov/sseop/images/thumb/{mission}/{mission}-{roll}-{frame}.jpg"
 
 def get_photosets():
-    data = r.zrevrange('eol-image-sets', 0, 0, withscores=True)
+    data = r.smembers('eol-image-sets')
     sets = []
     for d in data:
-        upload_date = datetime.datetime.strptime(str(int(d[1])), "%Y%m%d")
+        upload_date = datetime.datetime.strptime(str(int(d)), "%Y%m%d")
         upload_date = upload_date.strftime("%Y&ndash;%m&ndash;%d")
-        title = ": &nbsp; %d new photos" % json.loads(d[0])['numphotos']
-        #print upload_date, title
+        num = r.llen('eol-'+d)
+        title = ": &nbsp; %d new photos added" % num
         sets.append(upload_date+title)
     return sets
 
-def show_photos(num, after):
-    photos = r.lrange('eol-photos',after,after+num-1)
+def count_photos():
+    data = r.smembers('eol-image-sets')
+    num = 0
+    for d in data:
+        num += r.llen('eol-'+d)
+    return num 
+
+def show_photos(key, num, after):
+    photos = r.lrange(key,after,after+num-1)
     data = []
     for p in photos:
         p = json.loads(p)
@@ -33,6 +42,18 @@ def show_photos(num, after):
                       'thumb': THUMB_BASE.format(mission=p['mission'], roll=p['roll'], frame=p['frame'])
                     })
     return data
+
+def get_most_recent():
+    data = r.smembers('eol-image-sets')
+    sets = []
+    for d in data:
+        sets.append(int(d))
+    sets.sort()
+    return "eol-"+str(sets[-1])
+
+
+############
+
 
 def get_images(soup):
     images = []     

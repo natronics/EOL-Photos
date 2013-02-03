@@ -20,7 +20,7 @@
 
     start_loading();
 
-    $.post('loader.html', function(data) {
+    $.post('loader.html', {"set": "{{firstset}}" }, function(data) {
         $('#result').html(data);
         stop_loading();
         text = "Loading More Images "
