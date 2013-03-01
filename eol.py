@@ -53,8 +53,10 @@ def get_most_recent():
 def get_next_set(setid):
     all_sets = r.lrange('eol-image-set-list', 0, -1)
     for i, s in enumerate(all_sets):
-        if s == setid:
-            return allsets[i+1]
+        if ('eol-'+s) == setid:
+            if i == len(all_sets)-1:
+                return None
+            return 'eol-'+all_sets[i+1]
     return None
 
 def get_metadata(setid):

@@ -45,6 +45,8 @@ def loader():
         if not setid:
             return render_template('loader.html')
         data = eol.show_photos(setid, chunk, 0)
+        after = 0
+        header = eol.get_metadata(setid)
 
     print setid, after, len(data)
 
