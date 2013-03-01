@@ -7,3 +7,19 @@ photographs. The database can be queried by location, camera type, date, mission
 are pushed into the database a few times a week as images are downloaded from the International
 Space Station.
 
+## Install
+
+    $ sudo apt-get install python python-pip redis-server virtualenvwrapper
+    $ mkvirtualenv eolphotos
+    (eolphotos)$ pip install -r requirements.txt
+
+## Scrape Data
+
+    $ workon eolphotos
+    (eolphotos)$ python update.py
+
+## Run
+
+    $ workon eolphotos
+    (eolphotos)$ python app.py
+
