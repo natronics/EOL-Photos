@@ -47,14 +47,15 @@ def show_photos(key, num, after):
     return data
 
 def get_most_recent():
-    data = r.smembers('eol-image-sets')
-    sets = []
-    for d in data:
-        sets.append(int(d))
-    sets.sort()
-    if len(sets) > 0:
-        return "eol-"+str(sets[-1])
-    return ""
+    setid = r.lindex('eol-image-set-list', 0)
+    return "eol-"+setid
+
+def get_next_set(setid):
+    all_sets = r.lrange('eol-image-set-list', 0, -1)
+    for i, s in enumerate(all_sets):
+        if s == setid:
+            return allsets[i+1]
+    return None
 
 def get_metadata(setid):
     upload_date = "No new photos"

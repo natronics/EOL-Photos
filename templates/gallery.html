@@ -23,6 +23,7 @@
         console.log("animating");
     };
     var intervalid = null;
+    var allow_scroll = true;
 
     start_loading();
 
@@ -46,14 +47,16 @@
     }
 
     function get_more() {
-        start_loading();
-        var lastimg = $('#result div').last().attr("id");
-        var set = $('#result h3').last().attr("id");
-        console.log(set);
-        $.post('loader.html', {"after": lastimg, "set": set}, function(data) {
-            $('#result').append(data);
-            stop_loading();
-        });
+        if (allow_scroll) {
+            start_loading();
+            var lastimg = $('#result div').last().attr("id");
+            var set = $('#result h3').last().attr("id");
+            console.log(set);
+            $.post('loader.html', {"after": lastimg, "set": set}, function(data) {
+                $('#result').append(data);
+                stop_loading();
+            });
+        }
     }
 
     function closeImage() {

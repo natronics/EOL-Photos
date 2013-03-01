@@ -19,6 +19,10 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+#@app.route('/set/<setkey>')
+#def showset(setkey):
+#    return render_template('index.html')
+
 @app.route("/loader.html", methods=['POST'])
 def loader():
     chunk = 120
@@ -33,11 +37,16 @@ def loader():
         header = eol.get_metadata(setid)
     else:
         header = None
-    
 
     data = eol.show_photos(setid, chunk, after)
 
-    print after
+    if len(data) == 0:
+        setid = eol.get_next_set(setid)
+        if not setid:
+            return render_template('loader.html')
+        data = eol.show_photos(setid, chunk, 0)
+
+    print setid, after, len(data)
 
     images = []
 
