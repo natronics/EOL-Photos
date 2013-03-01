@@ -16,14 +16,13 @@ SETURL_BASE = "http://eol.jsc.nasa.gov/scripts/sseop/PhotoIdSets/PhotoIdSets.pl?
 THUMB_BASE = "http://eol.jsc.nasa.gov/sseop/images/thumb/{mission}/{mission}-{roll}-{frame}.jpg"
 
 def get_photosets():
-    data = r.smembers('eol-image-sets')
+    all_sets = r.lrange('eol-image-set-list', 0, -1)
     sets = []
-    for d in data:
-        upload_date = datetime.datetime.strptime(str(int(d)), "%Y%m%d")
+    for s in all_sets:
+        upload_date = datetime.datetime.strptime(str(int(s)), "%Y%m%d")
         upload_date = upload_date.strftime("%Y&ndash;%m&ndash;%d")
-        num = r.llen('eol-'+d)
-        title = ": &nbsp; %d new photos added" % num
-        sets.append(upload_date+title)
+        num = r.llen('eol-'+s)
+        sets.append({'datestr': upload_date, 'num': num, 'id': s})
     return sets
 
 def count_photos():
@@ -66,8 +65,9 @@ def get_metadata(setid):
         upload_date = upload_date.strftime("%B %d, %Y")
     return upload_date
 
-############
-
+#================================================================
+# Scrapper Code:
+#================================================================
 
 def get_images(soup):
     images = []     

@@ -30,7 +30,7 @@ for entry in d.entries:
             for photo in photos:
                 r.lpush('eol-'+str(guid), json.dumps(photo))
 
-        r.lpush('eol-image-set-list', guid)
+            r.lpush('eol-image-set-list', guid)
         r.sadd('eol-image-sets', guid)
 
 print "Finished"
