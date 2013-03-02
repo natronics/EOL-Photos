@@ -10,7 +10,7 @@ GLOBALS = {"sitename": "EOL Browser"}
 def index():
     fset = eol.get_most_recent()
     return render_template('index.html', sitename=GLOBALS["sitename"]
-                                       , title="Database of ISS Photographs"
+                                       , title="Recent ISS Photographs"
                                        , links=[{"title": "About", "url": "/about.html"}]
                                        , firstset=fset)
 
@@ -19,9 +19,16 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-#@app.route('/set/<setkey>')
-#def showset(setkey):
-#    return render_template('index.html')
+@app.route('/updates/<int:setid>')
+def showset(setid):
+    setid = 'eol-'+str(setid)
+    print setid
+    header = eol.get_metadata(setid)
+    return render_template('update.html', sitename=GLOBALS["sitename"]
+                                       , title="Recent ISS Photographs"
+                                       , links=[{"title": "All Images", "url": "/"}, {"title": "About", "url": "/about.html"}]
+                                       , setname=header
+                                       , setid=setid)
 
 @app.route("/loader.html", methods=['POST'])
 def loader():
@@ -41,14 +48,18 @@ def loader():
     data = eol.show_photos(setid, chunk, after)
 
     if len(data) == 0:
-        setid = eol.get_next_set(setid)
-        if not setid:
+        if request.form["infinite"] == "true":
+            setid = eol.get_next_set(setid)
+            if not setid:
+                return render_template('loader.html')
+            data = eol.show_photos(setid, chunk, 0)
+            after = 0
+            header = eol.get_metadata(setid)
+        else:
             return render_template('loader.html')
-        data = eol.show_photos(setid, chunk, 0)
-        after = 0
-        header = eol.get_metadata(setid)
 
-    print setid, after, len(data)
+    # Debug
+    # print setid, after, len(data)
 
     images = []
 
@@ -69,7 +80,7 @@ def about():
     n = eol.count_photos()
     return render_template('about.html', sitename=GLOBALS["sitename"]
                                        , title="About This Site"
-                                       , links=[{"title": "Image Gallery", "url": "/"}]
+                                       , links=[{"title": "All Images", "url": "/"}]
                                        , photosets=sets
                                        , nphotos=n)
 

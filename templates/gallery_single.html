@@ -27,7 +27,7 @@
 
     start_loading();
 
-    $.post('loader.html', {"set": "{{firstset}}", "infinite": true}, function(data) {
+    $.post('/loader.html', {"set": "{{ setid }}", "infinite": false}, function(data) {
         $('#result').html(data);
         stop_loading();
         text = "Loading More Images "
@@ -52,7 +52,7 @@
             var lastimg = $('#result div').last().attr("id");
             var set = $('#result h3').last().attr("id");
             console.log(set);
-            $.post('loader.html', {"after": lastimg, "set": set, "infinite": true}, function(data) {
+            $.post('/loader.html', {"after": lastimg, "set": set, "infinite": false}, function(data) {
                 $('#result').append(data);
                 stop_loading();
             });
