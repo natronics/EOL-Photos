@@ -22,7 +22,6 @@ def favicon():
 @app.route('/updates/<int:setid>')
 def showset(setid):
     setid = 'eol-'+str(setid)
-    print setid
     header = eol.get_metadata(setid)
     return render_template('update.html', sitename=GLOBALS["sitename"]
                                        , title="Recent ISS Photographs"

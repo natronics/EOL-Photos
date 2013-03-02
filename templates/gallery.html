@@ -20,7 +20,7 @@
     var anime = function() {
         $("#loadermessage").html(text+Array((++i)+1).join("."));
         if (i > 6) i = 0;
-        console.log("animating");
+        // console.log("animating");
     };
     var intervalid = null;
     var allow_scroll = true;
@@ -51,7 +51,7 @@
             start_loading();
             var lastimg = $('#result div').last().attr("id");
             var set = $('#result h3').last().attr("id");
-            console.log(set);
+            // console.log(set);
             $.post('loader.html', {"after": lastimg, "set": set, "infinite": true}, function(data) {
                 $('#result').append(data);
                 stop_loading();
