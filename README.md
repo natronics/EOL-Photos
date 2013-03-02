@@ -1,5 +1,7 @@
 # EOL Recent Photo Browser
 
+View this site live here: <http://eol-browser.herokuapp.com/>
+
 NASA's EOL library is a treasure trove of images
 from space taken by astronauts during their missions.  Their database, the &ldquo;Gateway to
 Astronaut Photography of Earth&rdquo; records the location and a description of over 600,000 astronaut 
