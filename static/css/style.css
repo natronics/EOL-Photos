@@ -63,6 +63,11 @@ body {
     font-weight: normal;
 }
 
+#content hr {
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #222;
+}
+
 #loadermessage {
     font-size: 1.3em;
     margin-top: 15px;

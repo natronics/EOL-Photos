@@ -24,7 +24,7 @@
     Recent EOL Updates:
     <ul>
       {% for set in photosets %}
-        <li>{{ set|safe }}</li>
+        <li><a href="updates/{{ set.id }}">{{ set.datestr|safe }} &nbsp; {{ set.num }} photos added</a></li>
       {% endfor %}
     </ul>
   </p>

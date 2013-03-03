@@ -1,6 +1,7 @@
 {% if header %}
   <div class="span12">
     <h3 id="{{setid}}" >{{ header|safe }}</h3>
+    <hr />
   </div>
 {% endif %}
 {% for img in images %}
@@ -9,6 +10,9 @@
   </div>
 {% else %}
   <div class="span12">
-    <em>No photos here so far</em>
+    <em>End of photo set</em>
+    <script>
+        allow_scroll = false;
+    </script>
   </div>
 {% endfor %}

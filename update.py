@@ -21,7 +21,7 @@ def update_guid(guid):
         # push into redis
         for photo in photos:
             r.lpush('eol-'+str(guid), json.dumps(photo))
-
+        r.lpush('eol-image-set-list', guid)
     r.sadd('eol-image-sets', guid)
 
 def check_rss():
@@ -35,7 +35,6 @@ def check_rss():
         if '-Images' in entry.guid:
             guid = int(entry.guid[-15:-7])
             update_guid(guid)
-
 
 if len(sys.argv) == 2:
     url = sys.argv[1]

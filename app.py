@@ -10,7 +10,7 @@ GLOBALS = {"sitename": "EOL Browser"}
 def index():
     fset = eol.get_most_recent()
     return render_template('index.html', sitename=GLOBALS["sitename"]
-                                       , title="Database of ISS Photographs"
+                                       , title="Recent ISS Photographs"
                                        , links=[{"title": "About", "url": "/about.html"}]
                                        , firstset=fset)
 
@@ -18,6 +18,16 @@ def index():
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+@app.route('/updates/<int:setid>')
+def showset(setid):
+    setid = 'eol-'+str(setid)
+    header = eol.get_metadata(setid)
+    return render_template('update.html', sitename=GLOBALS["sitename"]
+                                       , title="Recent ISS Photographs"
+                                       , links=[{"title": "All Images", "url": "/"}, {"title": "About", "url": "/about.html"}]
+                                       , setname=header
+                                       , setid=setid)
 
 @app.route("/loader.html", methods=['POST'])
 def loader():
@@ -33,11 +43,22 @@ def loader():
         header = eol.get_metadata(setid)
     else:
         header = None
-    
 
     data = eol.show_photos(setid, chunk, after)
 
-    print after
+    if len(data) == 0:
+        if request.form["infinite"] == "true":
+            setid = eol.get_next_set(setid)
+            if not setid:
+                return render_template('loader.html')
+            data = eol.show_photos(setid, chunk, 0)
+            after = 0
+            header = eol.get_metadata(setid)
+        else:
+            return render_template('loader.html')
+
+    # Debug
+    # print setid, after, len(data)
 
     images = []
 
@@ -58,7 +79,7 @@ def about():
     n = eol.count_photos()
     return render_template('about.html', sitename=GLOBALS["sitename"]
                                        , title="About This Site"
-                                       , links=[{"title": "Image Gallery", "url": "/"}]
+                                       , links=[{"title": "All Images", "url": "/"}]
                                        , photosets=sets
                                        , nphotos=n)
 

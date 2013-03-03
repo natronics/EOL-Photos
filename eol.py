@@ -16,14 +16,13 @@ SETURL_BASE = "http://eol.jsc.nasa.gov/scripts/sseop/PhotoIdSets/PhotoIdSets.pl?
 THUMB_BASE = "http://eol.jsc.nasa.gov/sseop/images/thumb/{mission}/{mission}-{roll}-{frame}.jpg"
 
 def get_photosets():
-    data = r.smembers('eol-image-sets')
+    all_sets = r.lrange('eol-image-set-list', 0, -1)
     sets = []
-    for d in data:
-        upload_date = datetime.datetime.strptime(str(int(d)), "%Y%m%d")
+    for s in all_sets:
+        upload_date = datetime.datetime.strptime(str(int(s)), "%Y%m%d")
         upload_date = upload_date.strftime("%Y&ndash;%m&ndash;%d")
-        num = r.llen('eol-'+d)
-        title = ": &nbsp; %d new photos added" % num
-        sets.append(upload_date+title)
+        num = r.llen('eol-'+s)
+        sets.append({'datestr': upload_date, 'num': num, 'id': s})
     return sets
 
 def count_photos():
@@ -47,14 +46,17 @@ def show_photos(key, num, after):
     return data
 
 def get_most_recent():
-    data = r.smembers('eol-image-sets')
-    sets = []
-    for d in data:
-        sets.append(int(d))
-    sets.sort()
-    if len(sets) > 0:
-        return "eol-"+str(sets[-1])
-    return ""
+    setid = r.lindex('eol-image-set-list', 0)
+    return "eol-"+setid
+
+def get_next_set(setid):
+    all_sets = r.lrange('eol-image-set-list', 0, -1)
+    for i, s in enumerate(all_sets):
+        if ('eol-'+s) == setid:
+            if i == len(all_sets)-1:
+                return None
+            return 'eol-'+all_sets[i+1]
+    return None
 
 def get_metadata(setid):
     upload_date = "No new photos"
@@ -63,8 +65,9 @@ def get_metadata(setid):
         upload_date = upload_date.strftime("%B %d, %Y")
     return upload_date
 
-############
-
+#================================================================
+# Scrapper Code:
+#================================================================
 
 def get_images(soup):
     images = []     
