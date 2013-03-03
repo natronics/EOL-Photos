@@ -27,6 +27,11 @@ a, a:hover {
 	font-size: 0.32em;
 }
 
+#header a,
+#header a:hover {
+    color: #eee;
+}
+
 #content {
 	padding-top: 50px;
 }
