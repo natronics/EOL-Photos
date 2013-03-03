@@ -11,7 +11,7 @@ An easy way to browse the most recent photos from NASA's Earth Observatory Libra
 
 <http://eol-browser.herokuapp.com>
 
-![Screenshot of running site](screenshot.png)
+![Screenshot of running site](screenshot.jpg)
 
 ***
 
