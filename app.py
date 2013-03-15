@@ -1,7 +1,9 @@
 import os
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, request, jsonify, render_template, send_from_directory, Response
 import eol
 import time
+import datetime
+import PyRSS2Gen
 app = Flask(__name__)
 
 GLOBALS = {"sitename": "EOL Browser"}
@@ -82,6 +84,27 @@ def about():
                                        , links=[{"title": "All Images", "url": "/"}]
                                        , photosets=sets
                                        , nphotos=n)
+
+@app.route("/feed.rss")
+def feed():
+    sets = eol.get_photosets()
+    feed_items = []
+    for s in sets:
+        name = str(s['num']) + " New Images From the ISS"
+        link = "http://eol-browser.herokuapp.com/updates/"+s['id']
+        desc = str(s['num']) + " new images added to the EOL database, scrapped on " + s['datestr']
+        date = datetime.datetime.strptime(s['id'], "%Y%m%d")
+        item = PyRSS2Gen.RSSItem(name, link, desc, "EOL Browser", None, None, None, PyRSS2Gen.Guid(link), date)
+        feed_items.append(item)
+
+    rss = PyRSS2Gen.RSS2(
+        title = "Recent Images From the ISS",
+        link = "http://eol-browser.herokuapp.com/",
+        description = "The latest images of Earth from space",
+        lastBuildDate = datetime.datetime.now(),
+        items = feed_items)
+
+    return Response(rss.to_xml(), mimetype='application/rss+xml, application/rdf+xml, application/atom+xml, application/xml, text/xml')
 
 if __name__ == "__main__":
     app.debug = True
