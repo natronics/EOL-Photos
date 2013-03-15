@@ -88,23 +88,26 @@ def get_images(soup):
     return images
 
 def get_first_page(url):
-      page = urllib.urlopen(url)
-      soup = BeautifulSoup(page)
-      
-      # Next Page
-      next_page = soup('form', {'name': 'NextPage'})[0]
-      html_footer = str(next_page.find('input', {'name': 'HTMLfooter'})['value'])
-      infile      = str(next_page.find('input', {'name': 'infile'})['value'])
-      records     = int(next_page.find('input', {'name': 'records'})['value'])
-      
-      # Number of pages
-      elem = soup.find('center', text=re.compile('Page '))
-      pages = int(elem.findNext('b').findNext('b').text)
-      
-      images      = get_images(soup)
-      record_key  = {"pages": pages, "htmlfooter": html_footer, "infile": infile, "records": records}
+    page = urllib.urlopen(url)
+    soup = BeautifulSoup(page)
 
-      return images, record_key
+    # Number of pages
+    elem = soup.find('center', text=re.compile('Page '))
+    pages = int(elem.findNext('b').findNext('b').text)
+      
+    record_key = {"pages": pages}
+    # Next Page
+    if pages > 1:
+        next_page = soup('form', {'name': 'NextPage'})[0]        
+        html_footer = str(next_page.find('input', {'name': 'HTMLfooter'})['value'])
+        infile      = str(next_page.find('input', {'name': 'infile'})['value'])
+        records     = int(next_page.find('input', {'name': 'records'})['value'])
+        record_key["htmlfooter"] = html_footer
+        record_key["infile"] = infile
+        record_key["records"] = records
+
+    images      = get_images(soup)
+    return images, record_key
 
 def get_page(key, page):
     images = []
