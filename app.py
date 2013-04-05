@@ -6,7 +6,7 @@ import datetime
 import PyRSS2Gen
 app = Flask(__name__)
 
-GLOBALS = {"sitename": "EOL Browser"}
+GLOBALS = {"sitename": "Space Shots"}
 
 @app.route("/")
 def index():
