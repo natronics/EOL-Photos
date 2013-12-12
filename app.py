@@ -8,19 +8,14 @@ db = SQLAlchemy(app)
 
 app.debug = True
 
+from models import *
 
-class PhotoSet(db.Model):
-    id = db.Column(db.String(80), primary_key=True)
-    date = db.Column(db.Date)
-
-    def __repr__(self):
-        return '<set %r>' % self.id
 
 @app.route("/")
 def index():
     resp =  "db: " + os.getenv('DATABASE_URL')
     for s in PhotoSet.query.all():
-        resp += "\n" + s
+        resp += "\n" + s.id + '|' +  s.date.isoformat()
 
     return resp
 

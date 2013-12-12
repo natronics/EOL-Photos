@@ -1,12 +1,9 @@
 import feedparser
-import redis
-import os
-import sys
-import json
-import eol
+import datetime
+from app import db
+from models import *
 
-REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
-r = redis.StrictRedis.from_url(REDIS_URL)
+
 
 def update_guid(guid):
     # check to see if set is new
@@ -33,14 +30,13 @@ def check_rss():
     # Find the new image RSS entry in the list
     for entry in d.entries:
         if '-Images' in entry.guid:
-            guid = int(entry.guid[-15:-7])
-            update_guid(guid)
+            guid = entry.guid[-15:-7]
+            myobject = PhotoSet(id=guid, date=datetime.datetime.now())
+            db.session.add(myobject)
+            db.session.commit()
+            print guid
+            #update_guid(guid)
 
-if len(sys.argv) == 2:
-    url = sys.argv[1]
-    guid = url[-15:-7]
-    update_guid(guid)
-else:
+
+if __name__ == '__main__':
     check_rss()
-
-print "Finished"
