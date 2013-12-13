@@ -1,15 +1,8 @@
-import redis
-import os
-import datetime
 import json
-import urllib
-import httplib
-from BeautifulSoup import BeautifulSoup
-import re
 import time
-
-REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
-r = redis.StrictRedis.from_url(REDIS_URL)
+import re
+import requests
+from bs4 import BeautifulSoup
 
 # EOL constants
 SETURL_BASE = "http://eol.jsc.nasa.gov/scripts/sseop/PhotoIdSets/PhotoIdSets.pl?set=DailyUpdates%2F{guid}-Images"
@@ -75,26 +68,37 @@ def get_images(soup):
 
     for row in results.findAll('tr'):
         columns = row.findAll('td')
-        if len(columns) >= 3 :
+        if len(columns) > 5 :
             mission   =       columns[1].string.strip()
             roll      =       columns[2].string.strip()
             frame     =       columns[3].a.string.strip()
-            #nadir_lat = float(columns[4].string.strip())
-            #nadir_lon = float(columns[5].string.strip())
+            nadir_lat = float(columns[4].string.strip())
+            nadir_lon = float(columns[5].string.strip())
 
-            image = {"mission": mission, "roll": roll, "frame": frame}
+            image = {"mission": mission, "roll": roll, "frame": frame, 'lat': nadir_lat, 'lon': nadir_lon}
             images.append(image)
 
     return images
 
 def get_first_page(url):
-    page = urllib.urlopen(url)
-    soup = BeautifulSoup(page)
+
+    page = requests.get(url)
+    soup = BeautifulSoup(page.text)
+
+    script = soup.find_all('script')
+    if len(script) == 1:
+        print "browswer redirect"
+        url = script[0].text.split('"')[1]
+        page = requests.get('http://eol.jsc.nasa.gov'+url)
+        soup = BeautifulSoup(page.text)
 
     # Number of pages
-    elem = soup.find('center', text=re.compile('Page '))
-    pages = int(elem.findNext('b').findNext('b').text)
-      
+    pages = None
+    elem = soup.find_all('center')
+    for e in elem:
+        if 'Page' in e.text:
+            pages = int(e.findNext('b').findNext('b').text)
+    
     record_key = {"pages": pages}
     # Next Page
     if pages > 1:
@@ -109,31 +113,24 @@ def get_first_page(url):
     images      = get_images(soup)
     return images, record_key
 
+
 def get_page(key, page):
     images = []
 
-    # POST data
-    params = urllib.urlencode({ 'HTMLfooter': key['htmlfooter']
-                              , 'infile':     key['infile']
-                              , 'page':       page
-                              , 'pagesize':   50
-                              , 'records':    key['records']
-                              , 'thumbs':     'N'
-                              , 'url':        '/sseop/'})
+    params = {  'HTMLfooter': key['htmlfooter'],
+                'infile':     key['infile'],
+                'page':       page,
+                'pagesize':   50,
+                'records':    key['records'],
+                'thumbs':     'N',
+                'url':        '/sseop/',
+    }
+    headers = {"Content-type": "application/x-www-form-urlencoded","Accept": "*/*"}
+    url = "http://eol.jsc.nasa.gov//scripts/sseop/changepage.pl"
+    response = requests.post(url, data=params, headers=headers)
 
-    headers = {"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}
-    conn = httplib.HTTPConnection("eol.jsc.nasa.gov:80")
-    conn.request("POST", "/scripts/sseop/changepage.pl", params, headers)
-    response = conn.getresponse()
-
-    print response.status, response.reason
-
-    if response.status == 200:
-
-        page = response.read()
-        soup = BeautifulSoup(page)
-        conn.close()
-
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text)
         images = get_images(soup)
 
     return images
@@ -145,6 +142,7 @@ def scrape_photos(url):
     images = []
     for im in images_1:
         images.append(im)
+    
     for i in range(2, record_key['pages']+1):
         print "getting page", i, "of", record_key['pages']
         images_page = get_page(record_key, i)

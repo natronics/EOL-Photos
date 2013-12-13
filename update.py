@@ -1,25 +1,19 @@
 import feedparser
+import eol
 import datetime
 from app import db
 from models import *
 
 
-
 def update_guid(guid):
-    # check to see if set is new
-    if not r.sismember('eol-image-sets', guid):
 
-        print "Found new photos"
+    link = eol.SETURL_BASE.format(guid=guid)
+    print link
+    photos = eol.scrape_photos(link)
 
-        # get photo ids
-        link = eol.SETURL_BASE.format(guid=guid)
-        photos = eol.scrape_photos(link)
-
-        # push into redis
-        for photo in photos:
-            r.lpush('eol-'+str(guid), json.dumps(photo))
-        r.lpush('eol-image-set-list', guid)
-    r.sadd('eol-image-sets', guid)
+    for p in photos:
+        photo = Photo(mission=p['mission'], roll=p['roll'], frame=p['frame'], set_id=guid, nadir_lon=p['lon'], nadir_lat=p['lat'])
+        db.session.add(photo)
 
 def check_rss():
     print "Checking EOL for updates"
@@ -31,11 +25,14 @@ def check_rss():
     for entry in d.entries:
         if '-Images' in entry.guid:
             guid = entry.guid[-15:-7]
-            photoset = PhotoSet(id=guid, date=datetime.datetime.now())
-            db.session.add(photoset)
-            db.session.commit()
             print guid
-            #update_guid(guid)
+
+            if db.session.query(PhotoSet.id).filter(PhotoSet.id == guid).count() == 0:
+                print "Found new photos"
+                photoset = PhotoSet(id=guid, date=datetime.datetime.now())
+                db.session.add(photoset)
+                update_guid(guid)
+                db.session.commit()
 
 
 if __name__ == '__main__':
