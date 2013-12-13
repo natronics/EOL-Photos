@@ -16,6 +16,8 @@ def index():
     resp =  "db: " + os.getenv('DATABASE_URL')
     for s in PhotoSet.query.all():
         resp += "\n" + s.id + '|' +  s.date.isoformat()
+        for p in s.photos:
+            resp += "\n         " + p.mission + "-" + p.roll + "-" + str(p.frame)
 
     return resp
 

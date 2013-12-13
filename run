@@ -1,0 +1,1 @@
+foreman start -e dev.env

@@ -31,8 +31,8 @@ def check_rss():
     for entry in d.entries:
         if '-Images' in entry.guid:
             guid = entry.guid[-15:-7]
-            myobject = PhotoSet(id=guid, date=datetime.datetime.now())
-            db.session.add(myobject)
+            photoset = PhotoSet(id=guid, date=datetime.datetime.now())
+            db.session.add(photoset)
             db.session.commit()
             print guid
             #update_guid(guid)
