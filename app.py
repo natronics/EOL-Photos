@@ -1,6 +1,7 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
+import eol
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
@@ -13,13 +14,14 @@ from models import *
 
 @app.route("/")
 def index():
-    resp =  "db: " + os.getenv('DATABASE_URL')
-    for s in PhotoSet.query.all():
-        resp += "\n" + s.id + '|' +  s.date.isoformat()
-        for p in s.photos:
-            resp += "\n         " + p.mission + "-" + p.roll + "-" + str(p.frame)
 
-    return resp
+    photos = []
+    for s in PhotoSet.query.all():
+        for p in s.photos:
+            photos.append({'mrf': p.mission + "-" + p.roll + "-" + str(p.frame),
+                'url': eol.THUMB_BASE.format(mission=p.mission, roll=p.roll, frame=p.frame)})
+
+    return render_template('index.html', title="Recent Images From Space", photos=photos[0:100])
 
 
 @app.route('/favicon.ico')

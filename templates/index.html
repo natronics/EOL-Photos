@@ -1,9 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div id="section">
+<div class="container">
+  <div id="section">
     <h2>Recent Images:</h2>
-    {% include "gallery.html" %}
+
+    <ul>
+        {% for photo in photos %}
+            <li class="col-lg-2 col-md-2 col-sm-3"><img src="/static/img/ISS031-E-146394.jpg"></li>
+        {% endfor %}
+    </ul>
+  </div>
+</div>
+<div class="container">
+  <button class="btn btn-primary pull-right" value="next">Next Page -&gt;</button>
 </div>
 
 {% endblock content %}
